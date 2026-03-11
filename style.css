@@ -1,0 +1,352 @@
+:root {
+    --bg-color: #0f111a;
+    --glass-bg: rgba(20, 25, 40, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --table-hover: rgba(56, 189, 248, 0.1);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent-glow: rgba(56, 189, 248, 0.5);
+    
+    /* Semantic Colors */
+    --color-total: #38bdf8;
+    --color-success: #34d399;
+    --color-warning: #fbbf24;
+    --color-danger: #f43f5e;
+    
+    --gradient-total: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    --gradient-success: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    --gradient-warning: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+    --gradient-danger: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Noto Sans TC', -apple-system, sans-serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* --- 背景動態點綴 --- */
+.bg-shape {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: -1;
+    animation: float 20s infinite ease-in-out alternate;
+}
+.shape1 { width: 600px; height: 600px; background: rgba(99, 102, 241, 0.15); top: -10%; left: -10%; }
+.shape2 { width: 500px; height: 500px; background: rgba(236, 72, 153, 0.15); bottom: -10%; right: -5%; animation-delay: -5s; }
+.shape3 { width: 400px; height: 400px; background: rgba(45, 212, 191, 0.1); top: 40%; left: 40%; animation-duration: 25s; }
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 50px) scale(1.1); }
+}
+
+/* --- 主容器 --- */
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* --- 玻璃擬物化通用樣式 --- */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* --- Header --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2rem;
+}
+.title-group h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.2rem;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+.title-group .subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--color-total);
+    letter-spacing: 2px;
+}
+.status-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+.update-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-success);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-success);
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+.refresh-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+.refresh-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-total);
+    color: var(--color-total);
+}
+
+/* --- 健康度指標橫幅 --- */
+.health-banner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+.health-banner::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 4px;
+}
+.health-banner.status-healthy::after { background: var(--gradient-success); }
+.health-banner.status-warning::after { background: var(--gradient-warning); }
+.health-banner.status-danger::after { background: var(--gradient-danger); }
+
+.health-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+.health-content {
+    flex: 1;
+}
+.health-content h2 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+}
+.health-content p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.health-stats {
+    display: flex;
+    gap: 1.5rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--glass-border);
+}
+.mini-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.mini-stat .label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.2rem;
+}
+.mini-stat .value {
+    font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* --- 頂部摘要卡片 (動態生成) --- */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+}
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+}
+.stat-card[data-type="total"]::before { background: var(--gradient-total); }
+.stat-card[data-type="review"]::before { background: var(--gradient-danger); }
+.stat-card[data-type="approve"]::before { background: var(--gradient-warning); }
+.stat-card[data-type="ready"]::before { background: var(--gradient-success); }
+
+.stat-title {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+.stat-value-group {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+.kpi-count {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+.kpi-unit {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+.kpi-amount {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    opacity: 0.8;
+}
+
+/* --- 表格區塊 --- */
+.table-section {
+    padding: 1.5rem 0;
+}
+.section-title {
+    font-size: 1.2rem;
+    padding: 0 1.5rem 1rem;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 0;
+}
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+}
+.modern-table th, .modern-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.modern-table th {
+    background: rgba(0,0,0,0.2);
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+.modern-table th small {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-top: 0.2rem;
+}
+.modern-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+.modern-table tbody tr:hover {
+    background-color: var(--table-hover);
+}
+
+/* 第一欄 (人員名稱) 靠左 */
+.modern-table th:first-child, 
+.modern-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: #fff;
+}
+
+/* 總和列特別樣式 */
+.tr-total {
+    background: rgba(56, 189, 248, 0.05) !important;
+    font-weight: 700;
+}
+.tr-total td {
+    border-top: 2px solid rgba(56, 189, 248, 0.3);
+    color: var(--color-total);
+}
+.tr-total td:first-child {
+    color: var(--color-total);
+}
+
+/* 數值高亮排版 */
+.val-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
+}
+.val-count {
+    color: #fff;
+    font-size: 1.1rem;
+    min-width: 30px;
+}
+.val-amount {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    min-width: 60px;
+}
+
+/* 特別強調的欄位 (已准待撥總計) */
+.highlight-col {
+    background: rgba(52, 211, 153, 0.05);
+}
+td.highlight-col .val-count { color: var(--color-success); font-weight: 700; }
+td.highlight-col .val-amount { color: rgba(52, 211, 153, 0.8); }
+
+@media (max-width: 1024px) {
+    .summary-cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
