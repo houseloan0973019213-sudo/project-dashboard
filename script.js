@@ -66,7 +66,9 @@ function analyzeHealthAndRender(currentTotal, historyArray) {
     let deltaB = 0;
     let comparisonTimeStr = "缺乏過去資料";
 
-    // 尋找對比基準點 (尋找距離現在大約 2~12 小時前的紀錄，越接近 3 小時越好)
+    // 重新設計對比基準點：尋找「隔夜或是前一個工作天」的資料
+    // 使用者的目標是：尋找距離現在大約 12~24 小時前的紀錄 (最有參考價值)
+    // 我們將尋找指標定為「最接近 24 小時前」，但容許最低 12 小時，最高 72 小時(跨六日)
     if (historyArray && historyArray.length > 1) {
         const now = new Date();
         let targetEntry = null;
@@ -78,22 +80,37 @@ function analyzeHealthAndRender(currentTotal, historyArray) {
             const entryTime = new Date(entry.timestamp);
             const diffHours = (now - entryTime) / (1000 * 60 * 60);
             
-            // 只要大於 1 小時就接受，特別記錄最接近 3 小時的
-            if (diffHours >= 1) {
-                const distTo3 = Math.abs(diffHours - 3);
-                if (distTo3 < smallestDiff) {
-                    smallestDiff = distTo3;
+            // 加入門檻：只看大於 12 小時以前的紀錄
+            if (diffHours >= 12) {
+                // 取距離 24 小時最近的那個誤差值
+                const distTo24 = Math.abs(diffHours - 24);
+                if (distTo24 < smallestDiff) {
+                    smallestDiff = distTo24;
                     targetEntry = entry;
                 }
             }
+        }
+
+        // 萬一本週末放假回來，差距變成 72 小時以上，為了避免沒東西比，
+        // 如果連大於 12 小時的都沒有，我們退而求其次找最舊的一筆 (通常是前一次打卡)
+        if (!targetEntry) {
+            targetEntry = historyArray[0]; 
         }
 
         if (targetEntry) {
             deltaA = currentA - targetEntry.A;
             deltaB = currentB - targetEntry.B;
             
-            const hoursAgo = Math.round((now - new Date(targetEntry.timestamp)) / (1000 * 60 * 60));
-            comparisonTimeStr = `與約 ${hoursAgo} 小時前相比`;
+            const diffHoursFinal = (now - new Date(targetEntry.timestamp)) / (1000 * 60 * 60);
+            
+            // 如果超過 48 小時，我們改用 天數 顯示，比較直觀 (例如：與約 3 天前相比)
+            if (diffHoursFinal > 48) {
+                const daysAgo = Math.round(diffHoursFinal / 24);
+                comparisonTimeStr = `與約 ${daysAgo} 天前相比`;
+            } else {
+                const hoursAgo = Math.round(diffHoursFinal);
+                comparisonTimeStr = `與約 ${hoursAgo} 小時前相比`;
+            }
         }
     }
 
