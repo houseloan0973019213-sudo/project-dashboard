@@ -69,13 +69,13 @@ function analyzeHealthAndRender(currentTotal, historyArray) {
     // 重新設計對比基準點：尋找「隔夜或是前一個工作天」的資料
     // 使用者的目標是：尋找距離現在大約 12~24 小時前的紀錄 (最有參考價值)
     // 我們將尋找指標定為「最接近 24 小時前」，但容許最低 12 小時，最高 72 小時(跨六日)
-    if (historyArray && historyArray.length > 1) {
+    if (historyArray && historyArray.length > 0) {
         const now = new Date();
         let targetEntry = null;
         let smallestDiff = Infinity;
         
-        // 倒序尋找歷史
-        for(let i=historyArray.length-2; i>=0; i--) {
+        // 倒序尋找歷史 (不要跳過最後一筆，因為資料可能是昨天抓的)
+        for(let i=historyArray.length-1; i>=0; i--) {
             const entry = historyArray[i];
             const entryTime = new Date(entry.timestamp);
             const diffHours = (now - entryTime) / (1000 * 60 * 60);
@@ -92,7 +92,7 @@ function analyzeHealthAndRender(currentTotal, historyArray) {
         }
 
         // 萬一本週末放假回來，差距變成 72 小時以上，為了避免沒東西比，
-        // 如果連大於 12 小時的都沒有，我們退而求其次找最舊的一筆 (通常是前一次打卡)
+        // 如果連大於 12 小時的都沒有，我們退而求其次找最舊的一筆 (通常是剛才才建立第一次歷史的狀況)
         if (!targetEntry) {
             targetEntry = historyArray[0]; 
         }
@@ -226,7 +226,16 @@ function formatNumber(numStr) {
 }
 
 function updateTimestamp() {
-    const now = new Date();
-    document.getElementById('lastUpdated').innerText = `目前預覽時間: ${now.toLocaleTimeString('zh-TW', { hour12: false })}`;
-    document.getElementById('lastUpdated').style.color = '#94a3b8';
+    // 取得「資料真實產生」的時間，藉由讀取 historyData 最後一筆的時間
+    let dataTimeStr = "未知時間";
+    if (typeof historyData !== 'undefined' && historyData.length > 0) {
+        const lastEntry = historyData[historyData.length - 1];
+        const lastDataTime = new Date(lastEntry.timestamp);
+        dataTimeStr = lastDataTime.toLocaleString('zh-TW', { hour12: false });
+    }
+    
+    const nowStr = new Date().toLocaleTimeString('zh-TW', { hour12: false });
+    const el = document.getElementById('lastUpdated');
+    el.innerHTML = `資料最新抓取時間: <strong style="color:var(--text-primary)">${dataTimeStr}</strong> (儀表板時間 ${nowStr})`;
+    el.style.color = '#94a3b8';
 }
