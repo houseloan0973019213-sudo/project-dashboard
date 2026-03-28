@@ -336,5 +336,12 @@ const historyData = [
     "A_amount": 6430,
     "B": 29,
     "B_amount": 3795
+  },
+  {
+    "timestamp": "2026-03-28T07:03:15.932Z",
+    "A": 52,
+    "A_amount": 6430,
+    "B": 29,
+    "B_amount": 3795
   }
 ];
