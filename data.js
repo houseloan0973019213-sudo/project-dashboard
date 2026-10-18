@@ -135,13 +135,6 @@ const dashboardData = [
 ];
 const historyData = [
   {
-    "timestamp": "2026-10-01T01:02:22.160Z",
-    "A": 46,
-    "A_amount": 7430,
-    "B": 11,
-    "B_amount": 1600
-  },
-  {
     "timestamp": "2026-10-01T07:02:51.363Z",
     "A": 47,
     "A_amount": 7450,
@@ -339,6 +332,13 @@ const historyData = [
   },
   {
     "timestamp": "2026-10-18T01:04:41.833Z",
+    "A": 35,
+    "A_amount": 5020,
+    "B": 18,
+    "B_amount": 2280
+  },
+  {
+    "timestamp": "2026-10-18T07:05:23.422Z",
     "A": 35,
     "A_amount": 5020,
     "B": 18,
