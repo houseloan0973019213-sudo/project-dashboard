@@ -62,8 +62,8 @@ async function fetchData() {
                 timestamp: new Date().toISOString(),
                 A: parseInt(totalRow["已准待對保件數"] || "0"),
                 A_amount: parseInt(totalRow["已准待對保金額"] || "0"),
-                B: parseInt(totalRow["已對保待撥件數的SUM"] || "0"),
-                B_amount: parseInt(totalRow["已對保待撥金額的SUM"] || "0")
+                B: parseInt(totalRow["已對保待撥件數"] || totalRow["已對保待撥件數的SUM"] || "0"),
+                B_amount: parseInt(totalRow["已對保待撥金額"] || totalRow["已對保待撥金額的SUM"] || "0")
             };
             
             // 推進陣列

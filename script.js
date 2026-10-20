@@ -60,7 +60,7 @@ function analyzeHealthAndRender(currentTotal, historyArray) {
 
     // 當前數值
     const currentA = parseInt(currentTotal["已准待對保件數"] || "0");
-    const currentB = parseInt(currentTotal["已對保待撥件數的SUM"] || "0");
+    const currentB = parseInt(currentTotal["已對保待撥件數"] || currentTotal["已對保待撥件數的SUM"] || "0");
 
     let deltaA = 0;
     let deltaB = 0;
@@ -165,7 +165,7 @@ function renderSummaryCards(totalRow) {
     const cards = [
         { title: "已進件待核准", count: totalRow["已進件待核准"] || "0", amount: totalRow["已進件待核准金額"] || "0", type: "review" },
         { title: "已准待對保", count: totalRow["已准待對保件數"] || "0", amount: totalRow["已准待對保金額"] || "0", type: "approve" },
-        { title: "已對保待撥", count: totalRow["已對保待撥件數的SUM"] || "0", amount: totalRow["已對保待撥金額的SUM"] || "0", type: "ready" },
+        { title: "已對保待撥", count: totalRow["已對保待撥件數"] || totalRow["已對保待撥件數的SUM"] || "0", amount: totalRow["已對保待撥金額"] || totalRow["已對保待撥金額的SUM"] || "0", type: "ready" },
         { title: "已准待撥 (總存量)", count: totalRow["已准待撥件數"] || "0", amount: totalRow["已准待撥"] || "0", type: "total" }
     ];
 
@@ -196,7 +196,10 @@ function generateTableRow(row, isTotal) {
     const name = row["經辦"] || "未知";
     const tdInReview = formatCell(row["已進件待核准"], row["已進件待核准金額"]);
     const tdApprove = formatCell(row["已准待對保件數"], row["已准待對保金額"]);
-    const tdReady = formatCell(row["已對保待撥件數的SUM"], row["已對保待撥金額的SUM"]);
+    const tdReady = formatCell(
+        row["已對保待撥件數"] || row["已對保待撥件數的SUM"],
+        row["已對保待撥金額"] || row["已對保待撥金額的SUM"]
+    );
     const tdTotal = formatCell(row["已准待撥件數"], row["已准待撥"]);
 
     return `
