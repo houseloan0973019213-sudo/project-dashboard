@@ -1,12 +1,5 @@
 [
   {
-    "timestamp": "2026-10-19T07:06:32.633Z",
-    "A": 33,
-    "A_amount": 4565,
-    "B": 17,
-    "B_amount": 2495
-  },
-  {
     "timestamp": "2026-10-20T01:07:07.029Z",
     "A": 33,
     "A_amount": 4465,
@@ -208,5 +201,12 @@
     "A_amount": null,
     "B": null,
     "B_amount": null
+  },
+  {
+    "timestamp": "2026-11-02T07:45:20.101Z",
+    "A": 45,
+    "A_amount": 6400,
+    "B": 33,
+    "B_amount": 3890
   }
 ]
